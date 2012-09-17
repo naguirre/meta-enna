@@ -1,0 +1,14 @@
+libvmime-0.9.1/SConstruct.patch:
+=========================
+
+--- libvmime-0.9.1/SConstruct.orig      2011-03-02 13:33:14.871718344 -0500
++++ libvmime-0.9.1/SConstruct   2011-03-02 14:39:23.699720558 -0500
+@@ -500,1 +500,4 @@
++ 'This option has no effect if "with_messaging" is not activated.\n'
++ 'Separate protocols with spaces; string must be quoted with ".\n'
++ 'Currently available protocols: pop3, smtp, imap, maildir, sendmail.',
+-               '"pop3 smtp imap maildir sendmail"'
++               '"pop3 smtp imap maildir"'
+),
+(
+'with_platforms',
