@@ -1,0 +1,65 @@
+#!/bin/sh
+
+case "$1" in
+    start)
+	if [ -s /var/run/squeezeplay.pid ] && kill -0 $(cat /var/run/squeezeplay.pid)
+	then
+		echo "SqueezePlay is already running"
+		exit 1
+	fi
+
+	echo "Starting SqueezePlay"
+
+	export SDL_NOMOUSE=1
+	export ALSA_CONFIG_PATH=/usr/share/alsa/alsa.conf
+	export SQUEEZEPLAY_HOME=/etc/squeezeplay
+
+	# Add extensions on media eg SD card to lua path
+	for dir in /media/*/squeezeplay; do
+		if [ -d $dir ]; then
+			LUA_PATH="$LUA_PATH;$dir/?.lua"
+		fi
+	done
+	export LUA_PATH
+
+	(cd /usr/bin; /usr/bin/jive) &
+	echo $! > /var/run/squeezeplay.pid
+	;;
+
+    stop)
+	echo "Stopping SqueezePlay"
+
+	if [ -s /var/run/squeezeplay.pid ]; then
+		/bin/kill $(cat /var/run/squeezeplay.pid)
+
+		/bin/rm /var/run/squeezeplay.pid
+		/bin/rm /var/run/squeezeplay.wdog
+	fi
+	;;
+
+    stopwdog)
+	echo "Stopping SqueezePlay (keeping watchdog alive)"
+
+	if [ -s /var/run/squeezeplay.pid ]; then
+		/bin/kill $(cat /var/run/squeezeplay.pid)
+
+		/bin/rm /var/run/squeezeplay.pid
+		/bin/rm /var/run/squeezeplay.wdog
+	fi
+
+	# Prevent watchdog failure (for one hour)
+	/bin/sleep 1h &
+	echo $! > /var/run/squeezeplay.pid
+	;;
+
+    restart)
+	$0 stop
+	$0 start
+	;;
+
+    *)
+	echo "Usage: $0 {start|stop|stopwdog|restart}"
+	exit 1
+esac
+
+exit 0

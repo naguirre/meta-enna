@@ -1,0 +1,119 @@
+#!/bin/sh
+
+BASE=/usr/squeezecenter
+
+LANG=en_US.utf8; export LANG
+
+PID=/var/run/squeezecenter.pid
+SCANNERPID=/var/run/scanner.pid
+RESIZERPID=/var/run/gdresized.pid
+
+# Some stuff does not seem to work without this
+cd $BASE
+
+case "$1" in
+	start)
+		if [ -s $PID ] && kill -0 $(cat $PID)
+		then
+			echo "Squeezebox Server is already running"
+			exit 1
+		fi
+		
+		echo "Starting SqueezeCenter"
+
+		# Remove scan.json before starting the server, so progress screen
+		# is correct even if server hasn't fully started yet
+		rm -f /etc/squeezecenter/scan.json
+	
+		nice -n 5 $BASE/slimserver.pl --charset utf8 --noimage --novideo --noupnp --noweb --notranscoding --nosb1slimp3sync --nostatistics --noinfolog --nodebuglog --logfile syslog &
+		echo $! > $PID
+		
+		$0 startresizer
+		;;
+		
+	startresizer)
+		if [ -s $RESIZERPID ] && kill -0 $(cat $RESIZERPID)
+		then
+			echo "Artwork Resizer is already running"
+			exit 1
+		fi
+		
+		echo "Starting Artwork Resizer"
+		
+		nice -n 10 $BASE/gdresized.pl &
+		echo $! > $RESIZERPID
+		;;
+
+	stop)
+		$0 stopscan
+		$0 stopserver
+		$0 stopresizer
+		;;
+
+	stopserver)
+		if [ -s $PID ] && kill -0 $(cat $PID)
+		then
+			echo "Stopping Squeezebox Server"
+
+			if [ -s $PID ]; then
+				/bin/kill $(cat $PID)
+
+				/bin/rm $PID
+			fi
+		else
+			echo "Squeezebox Server is not running"
+		fi
+		;;
+
+	stopscan)
+		if [ -s $SCANNERPID ] && kill -0 $(cat $SCANNERPID)
+		then
+			echo "Stopping Scanner"
+			if [ -s $SCANNERPID ]; then
+				/bin/kill $(cat $SCANNERPID)
+
+				/bin/rm $SCANNERPID
+			fi
+		else
+			echo "Scanner is not running"
+		fi	
+		;;
+		
+	stopresizer)
+		if [ -s $RESIZERPID ] && kill -0 $(cat $RESIZERPID)
+		then
+			echo "Stopping Artwork Resizer"
+			if [ -s $RESIZERPID ]; then
+				/bin/kill $(cat $RESIZERPID)
+				
+				/bin/rm $RESIZERPID
+			fi
+		else
+			echo "Artwork Resizer is not running"
+		fi
+		;;
+		
+	rescan)
+		$0 restart
+	
+#		echo "Running Squeezebox Server scanner"
+#		(
+#			$BASE/scanner.pl --pid $SCANNERPID --rescan --noimage --novideo --noinfolog --nodebuglog --nostatistics
+#			$0 start
+#		) &
+		;;
+
+	restart)
+		(
+			$0 stop
+			sleep 2
+			$0 start
+		) &
+		;;
+
+	*)
+		echo "Usage: $0 {start|stop|rescan|stopscan|restart}"
+		exit 1
+esac
+
+exit 0

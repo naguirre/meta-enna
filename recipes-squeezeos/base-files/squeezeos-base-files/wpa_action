@@ -1,0 +1,16 @@
+#!/bin/sh
+
+IFNAME=$1
+CMD=$2
+
+/usr/bin/logger "wpa_action $IFNAME $CMD"
+
+if [ "$CMD" = "CONNECTED" ]; then
+	# Kick DHCP client to do a renewal
+	kill -usr1 `cat /var/run/udhcpc.$IFNAME.pid`
+fi
+
+if [ "$CMD" = "DISCONNECTED" ]; then 
+	# TODO any actions still needed?
+fi
+

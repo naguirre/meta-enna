@@ -1,0 +1,609 @@
+diff -r fba40d9f4a73 build-scripts/fatbuild.sh
+--- a/build-scripts/fatbuild.sh	Fri Jan 20 19:49:48 2012 -0500
++++ b/build-scripts/fatbuild.sh	Sun Sep 16 19:11:49 2012 +0200
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ #
+ # Build a fat binary on Mac OS X, thanks Ryan!
+-
++prefix=$PREFIX
+ # Number of CPUs (for make -j)
+ NCPU=`sysctl -n hw.ncpu`
+ if test x$NJOB = x; then
+diff -r fba40d9f4a73 include/SDL.h
+--- a/include/SDL.h	Fri Jan 20 19:49:48 2012 -0500
++++ b/include/SDL.h	Sun Sep 16 19:11:49 2012 +0200
+@@ -63,6 +63,7 @@
+ #define SDL_INIT_VIDEO		0x00000020
+ #define SDL_INIT_CDROM		0x00000100
+ #define SDL_INIT_JOYSTICK	0x00000200
++#define SDL_INIT_EVENTLOOP	0x00000400
+ #define SDL_INIT_NOPARACHUTE	0x00100000	/**< Don't catch fatal signals */
+ #define SDL_INIT_EVENTTHREAD	0x01000000	/**< Not supported on all OS's */
+ #define SDL_INIT_EVERYTHING	0x0000FFFF
+diff -r fba40d9f4a73 include/SDL_events.h
+--- a/include/SDL_events.h	Fri Jan 20 19:49:48 2012 -0500
++++ b/include/SDL_events.h	Sun Sep 16 19:11:49 2012 +0200
+@@ -347,6 +347,12 @@
+ */
+ extern DECLSPEC Uint8 SDLCALL SDL_EventState(Uint8 type, int state);
+ 
++/*
++  Added for jive - return number of events in the event queue
++*/
++extern DECLSPEC int SDLCALL SDL_EventQueueLength(void);
++
++
+ /* Ends C function definitions when using C++ */
+ #ifdef __cplusplus
+ }
+diff -r fba40d9f4a73 include/SDL_keysym.h
+--- a/include/SDL_keysym.h	Fri Jan 20 19:49:48 2012 -0500
++++ b/include/SDL_keysym.h	Sun Sep 16 19:11:49 2012 +0200
+@@ -296,6 +296,71 @@
+ 	SDLK_UNDO		= 322,		/**< Atari keyboard has Undo */
+         /*@}*/
+ 
++    /* "Internet"/"MultiMedia" keyboards */
++    SDLK_Standby            = 323,
++    SDLK_AudioLowerVolume   = 324,
++    SDLK_AudioMute          = 325,
++    SDLK_AudioRaiseVolume   = 326,
++    SDLK_AudioPlay          = 327,
++    SDLK_AudioStop          = 328,
++    SDLK_AudioPrev          = 329,
++    SDLK_AudioNext          = 330,
++    SDLK_HomePage           = 331,
++    SDLK_Mail               = 332,
++    SDLK_Start              = 333,
++    SDLK_Search             = 334,
++    SDLK_AudioRecord        = 325,
++
++    SDLK_Calculator         = 326,
++    SDLK_Memo               = 327,
++    SDLK_ToDoList           = 328,
++    SDLK_Calendar           = 329,
++    SDLK_PowerDown          = 330,
++    SDLK_ContrastAdjust     = 331,
++    SDLK_RockerUp           = 332,
++    SDLK_RockerDown         = 333,
++    SDLK_RockerEnter        = 334,
++
++    SDLK_Back               = 335,
++    SDLK_Forward            = 336,
++    SDLK_Stop               = 337,
++    SDLK_Refresh            = 338,
++    SDLK_PowerOff           = 339,
++    SDLK_WakeUp             = 340,
++    SDLK_Eject              = 341,
++    SDLK_ScreenSaver        = 342,
++    SDLK_WWW                = 343,
++    SDLK_Sleep              = 344,
++    SDLK_Favorites          = 345,
++    SDLK_AudioPause         = 346,
++    SDLK_AudioMedia         = 347,
++    SDLK_MyComputer         = 348,
++    SDLK_VendorHome         = 349,
++    SDLK_LightBulb          = 350,
++    SDLK_Shop               = 351,
++    SDLK_History            = 352,
++    SDLK_OpenURL            = 353,
++    SDLK_AddFavorite        = 354,
++    SDLK_HotLinks           = 355,
++    SDLK_BrightnessAdjust   = 356,
++
++    SDLK_Launch0            = 357,
++    SDLK_Launch1            = 358,
++    SDLK_Launch2            = 359,
++    SDLK_Launch3            = 360,
++    SDLK_Launch4            = 361,
++    SDLK_Launch5            = 362,
++    SDLK_Launch6            = 363,
++    SDLK_Launch7            = 364,
++    SDLK_Launch8            = 365,
++    SDLK_Launch9            = 366,
++    SDLK_LaunchA            = 367,
++    SDLK_LaunchB            = 368,
++    SDLK_LaunchC            = 369,
++    SDLK_LaunchD            = 370,
++    SDLK_LaunchE            = 371,
++    SDLK_LaunchF            = 372,
++
+ 	/* Add any other keys here */
+ 
+ 	SDLK_LAST
+diff -r fba40d9f4a73 src/cdrom/macosx/CDPlayer.h
+--- a/src/cdrom/macosx/CDPlayer.h	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/cdrom/macosx/CDPlayer.h	Sun Sep 16 19:11:49 2012 +0200
+@@ -34,6 +34,10 @@
+ #include "SDL_thread.h"
+ #include "SDL_mutex.h"
+ 
++#if __MAC_OS_X_VERSION_MIN_REQUIRED < 1050
++typedef SInt16 FSIORefNum;
++#endif
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+diff -r fba40d9f4a73 src/events/SDL_events.c
+--- a/src/events/SDL_events.c	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/events/SDL_events.c	Sun Sep 16 19:11:49 2012 +0200
+@@ -242,16 +242,19 @@
+ 	SDL_ProcessEvents[SDL_SYSWMEVENT] = SDL_IGNORE;
+ 
+ 	/* Initialize event handlers */
+-	retcode = 0;
+-	retcode += SDL_AppActiveInit();
+-	retcode += SDL_KeyboardInit();
+-	retcode += SDL_MouseInit();
+-	retcode += SDL_QuitInit();
+-	if ( retcode < 0 ) {
+-		/* We don't expect them to fail, but... */
+-		return(-1);
++	if (flags & SDL_INIT_VIDEO) {
++		retcode = 0;
++		retcode += SDL_AppActiveInit();
++		retcode += SDL_KeyboardInit();
++		retcode += SDL_MouseInit();
++		retcode += SDL_QuitInit();
++		if ( retcode < 0 ) {
++			/* We don't expect them to fail, but... */
++			return(-1);
++		}
+ 	}
+ 
++
+ 	/* Create the lock and event thread */
+ 	if ( SDL_StartEventThread(flags) < 0 ) {
+ 		SDL_StopEventLoop();
+@@ -500,3 +503,13 @@
+ 	/* Update internal event state */
+ 	return(posted);
+ }
++
++
++/* Added for jive - return number of events in the event queue
++*/
++int SDL_EventQueueLength(void)
++{
++	return (SDL_EventQ.tail - SDL_EventQ.head + MAXEVENTS) % MAXEVENTS;
++}
++
++
+diff -r fba40d9f4a73 src/thread/pthread/SDL_systhread.c
+--- a/src/thread/pthread/SDL_systhread.c	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/thread/pthread/SDL_systhread.c	Sun Sep 16 19:11:49 2012 +0200
+@@ -52,6 +52,7 @@
+ int SDL_SYS_CreateThread(SDL_Thread *thread, void *args)
+ {
+ 	pthread_attr_t type;
++	size_t stacksize;
+ 
+ 	/* Set the thread attributes */
+ 	if ( pthread_attr_init(&type) != 0 ) {
+@@ -60,6 +61,10 @@
+ 	}
+ 	pthread_attr_setdetachstate(&type, PTHREAD_CREATE_JOINABLE);
+ 
++	/* set stack size to 128k */
++	stacksize = 128 * 1024;
++	pthread_attr_setstacksize(&type, stacksize);
++
+ 	/* Create the thread and go! */
+ 	if ( pthread_create(&thread->handle, &type, RunThread, args) != 0 ) {
+ 		SDL_SetError("Not enough resources to create thread");
+diff -r fba40d9f4a73 src/timer/SDL_timer.c
+--- a/src/timer/SDL_timer.c	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/timer/SDL_timer.c	Sun Sep 16 19:11:49 2012 +0200
+@@ -108,6 +108,12 @@
+ 	SDL_bool removed;
+ 
+ 	SDL_mutexP(SDL_timer_mutex);
++
++	if ( !SDL_timer_running ) {
++		SDL_mutexV(SDL_timer_mutex);
++		return;
++	}
++
+ 	list_changed = SDL_FALSE;
+ 	now = SDL_GetTicks();
+ 	for ( prev = NULL, t = SDL_timers; t; t = next ) {
+@@ -135,23 +141,21 @@
+ 				/* FIXME: what if ms was changed? */
+ 				break;
+ 			}
+-			if ( ms != t->interval ) {
+-				if ( ms ) {
+-					t->interval = ROUND_RESOLUTION(ms);
++			if ( ms ) {
++				t->interval = ROUND_RESOLUTION(ms);
++			} else {
++				/* Remove timer from the list */
++#ifdef DEBUG_TIMERS
++				printf("SDL: Removing timer %p\n", t);
++#endif
++				if ( prev ) {
++					prev->next = next;
+ 				} else {
+-					/* Remove timer from the list */
+-#ifdef DEBUG_TIMERS
+-					printf("SDL: Removing timer %p\n", t);
+-#endif
+-					if ( prev ) {
+-						prev->next = next;
+-					} else {
+-						SDL_timers = next;
+-					}
+-					SDL_free(t);
+-					--SDL_timer_running;
+-					removed = SDL_TRUE;
++					SDL_timers = next;
+ 				}
++				SDL_free(t);
++				--SDL_timer_running;
++				removed = SDL_TRUE;
+ 			}
+ 		}
+ 		/* Don't update prev if the timer has disappeared */
+diff -r fba40d9f4a73 src/timer/unix/SDL_systimer.c
+--- a/src/timer/unix/SDL_systimer.c	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/timer/unix/SDL_systimer.c	Sun Sep 16 19:11:49 2012 +0200
+@@ -197,9 +197,7 @@
+ static int RunTimer(void *unused)
+ {
+ 	while ( timer_alive ) {
+-		if ( SDL_timer_running ) {
+-			SDL_ThreadedTimerCheck();
+-		}
++		SDL_ThreadedTimerCheck();
+ 		SDL_Delay(1);
+ 	}
+ 	return(0);
+diff -r fba40d9f4a73 src/video/SDL_blit.c
+--- a/src/video/SDL_blit.c	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/video/SDL_blit.c	Sun Sep 16 19:11:49 2012 +0200
+@@ -193,6 +193,9 @@
+ 	}
+ 	else
+ #endif
++	if(srcskip == dstskip && srcskip == w)
++		SDL_memcpy(dst, src, w*h);
++	else
+ 	while ( h-- ) {
+ 		SDL_memcpy(dst, src, w);
+ 		src += srcskip;
+diff -r fba40d9f4a73 src/video/SDL_video.c
+--- a/src/video/SDL_video.c	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/video/SDL_video.c	Sun Sep 16 19:11:49 2012 +0200
+@@ -274,7 +274,7 @@
+ 	video->info.vfmt = SDL_VideoSurface->format;
+ 
+ 	/* Start the event loop */
+-	if ( SDL_StartEventLoop(flags) < 0 ) {
++	if ( SDL_StartEventLoop(flags | SDL_INIT_VIDEO) < 0 ) {
+ 		SDL_VideoQuit();
+ 		return(-1);
+ 	}
+diff -r fba40d9f4a73 src/video/fbcon/SDL_fbevents.c
+--- a/src/video/fbcon/SDL_fbevents.c	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/video/fbcon/SDL_fbevents.c	Sun Sep 16 19:11:49 2012 +0200
+@@ -61,8 +61,8 @@
+ /* The translation tables from a console scancode to a SDL keysym */
+ #define NUM_VGAKEYMAPS	(1<<KG_CAPSSHIFT)
+ static Uint16 vga_keymap[NUM_VGAKEYMAPS][NR_KEYS];
+-static SDLKey keymap[128];
+-static Uint16 keymap_temp[128]; /* only used at startup */
++static SDLKey keymap[210];
++static Uint16 keymap_temp[210]; /* only used at startup */
+ static SDL_keysym *TranslateKey(int scancode, SDL_keysym *keysym);
+ 
+ /* Ugh, we have to duplicate the kernel's keysym mapping code...
+@@ -998,14 +998,27 @@
+ 	int pressed;
+ 	int scancode;
+ 	SDL_keysym keysym;
+-
+ 	nread = read(keyboard_fd, keybuf, BUFSIZ);
+-	for ( i=0; i<nread; ++i ) {
+-		scancode = keybuf[i] & 0x7F;
+-		if ( keybuf[i] & 0x80 ) {
+-			pressed = SDL_RELEASED;
++	for ( i = 0; i<nread; ++i ) {
++		if ( ((keybuf[i] == 0) || keybuf[i] == 128) && (nread-i >= 2) && keybuf[i + 1] == 129) {
++			/* is extended character (scancode>128), comes in as three codes,
++			first code: 0(pressed) or 128(released), second code:129
++			third code: actual extended scancode value */
++			scancode = keybuf[i + 2];
++			if (keybuf[i] == 0) {
++				pressed = SDL_PRESSED;
++			} else {
++				pressed = SDL_RELEASED;
++			}
++			//push past next 2 since the set of 3 are the extended character representation
++			i += 2;
+ 		} else {
+-			pressed = SDL_PRESSED;
++			scancode = keybuf[i] & 0x7F;
++			if ( keybuf[i] & 0x80 ) {
++				pressed = SDL_RELEASED;
++			} else {
++				pressed = SDL_PRESSED;
++			}
+ 		}
+ 		TranslateKey(scancode, &keysym);
+ 		/* Handle Ctrl-Alt-FN for vt switch */
+@@ -1133,6 +1146,33 @@
+ 	  case 127:
+ 	    keymap[i] = SDLK_MENU;
+ 	    break;
++	  case 113:
++	    keymap[i] = SDLK_AudioMute;
++	    break;
++	  case 114:
++	    keymap[i] = SDLK_AudioLowerVolume;
++	    break;
++	  case 115:
++	    keymap[i] = SDLK_AudioRaiseVolume;
++	    break;
++	  case 116:
++	    keymap[i] = SDLK_POWER;
++	    break;
++	  case 142:
++	    keymap[i] = SDLK_Sleep;
++	    break;
++	  case 163:
++	    keymap[i] = SDLK_AudioNext;
++	    break;
++	  case 164:
++	    keymap[i] = SDLK_AudioPause;
++	    break;
++	  case 165:
++	    keymap[i] = SDLK_AudioPrev;
++	    break;
++	  case 207:
++	    keymap[i] = SDLK_AudioPlay;
++	    break;
+ 	  /* this should take care of all standard ascii keys */
+ 	  default:
+ 	    keymap[i] = KVAL(vga_keymap[0][i]);
+@@ -1199,7 +1239,7 @@
+ 	    case K_NUM:  keymap[i] = SDLK_NUMLOCK;   break;
+ 	    case K_CAPS: keymap[i] = SDLK_CAPSLOCK;  break;
+ 
+-	    case K_F13:   keymap[i] = SDLK_PRINT;     break;
++	    //case K_F13:   keymap[i] = SDLK_PRINT;     break;
+ 	    case K_HOLD:  keymap[i] = SDLK_SCROLLOCK; break;
+ 	    case K_PAUSE: keymap[i] = SDLK_PAUSE;     break;
+ 
+diff -r fba40d9f4a73 src/video/fbcon/SDL_fbvideo.c
+--- a/src/video/fbcon/SDL_fbvideo.c	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/video/fbcon/SDL_fbvideo.c	Sun Sep 16 19:11:49 2012 +0200
+@@ -80,7 +80,8 @@
+ 	{  0, 0,  640,  400 },		/*  8 bpp: 0x100, or 256 */
+ 	{  0, 0,  512,  384 },
+ 	{  0, 0,  320,  240 },
+-	{  0, 0,  320,  200 }
++	{  0, 0,  320,  200 },
++	{  0, 0,  240,  320 },		/* PAD LCD */
+ };
+ static const struct {
+ 	int xres;
+@@ -1048,9 +1049,9 @@
+ 		vinfo.green.length = vinfo.green.offset = 0;
+ 		vinfo.blue.length = vinfo.blue.offset = 0;
+ 		vinfo.transp.length = vinfo.transp.offset = 0;
+-		if ( ! choose_fbmodes_mode(&vinfo) ) {
+-			choose_vesa_mode(&vinfo);
+-		}
++		//if ( ! choose_fbmodes_mode(&vinfo) ) {
++		//	choose_vesa_mode(&vinfo);
++		//}
+ #ifdef FBCON_DEBUG
+ 		fprintf(stderr, "Printing wanted vinfo:\n");
+ 		print_vinfo(&vinfo);
+@@ -1412,6 +1413,13 @@
+ #ifdef FBIOWAITRETRACE /* Heheh, this didn't make it into the main kernel */
+ 	ioctl(console_fd, FBIOWAITRETRACE, 0);
+ #endif
++
++	/* For Freescale MXC kernels */
++#ifndef MXCFB_WAIT_FOR_VSYNC
++#define MXCFB_WAIT_FOR_VSYNC	_IOW('F', 0x20, u_int32_t)
++#endif
++	ioctl(console_fd, MXCFB_WAIT_FOR_VSYNC, 0);
++
+ 	return;
+ }
+ 
+diff -r fba40d9f4a73 src/video/math_private.h
+--- a/src/video/math_private.h	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/video/math_private.h	Sun Sep 16 19:11:49 2012 +0200
+@@ -11,7 +11,7 @@
+ 
+ /*
+  * from: @(#)fdlibm.h 5.1 93/09/24
+- * $Id$
++ * $Id: math_private.h 1969 2006-02-24 09:57:14Z slouken $
+  */
+ 
+ #ifndef _MATH_PRIVATE_H_
+diff -r fba40d9f4a73 src/video/quartz/SDL_QuartzGL.m
+--- a/src/video/quartz/SDL_QuartzGL.m	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/video/quartz/SDL_QuartzGL.m	Sun Sep 16 19:11:49 2012 +0200
+@@ -45,7 +45,8 @@
+ @implementation NSOpenGLContext (CGLContextAccess)
+ - (CGLContextObj) cglContext;
+ {
+-    return _contextAuxiliary;
++return NULL;  // !!! FIXME
++    //return _contextAuxiliary;
+ }
+ @end
+ CGLContextObj QZ_GetCGLContextObj(NSOpenGLContext *nsctx)
+diff -r fba40d9f4a73 src/video/quartz/SDL_QuartzVideo.m
+--- a/src/video/quartz/SDL_QuartzVideo.m	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/video/quartz/SDL_QuartzVideo.m	Sun Sep 16 19:11:49 2012 +0200
+@@ -36,6 +36,8 @@
+     __IPHONE_NA, __IPHONE_NA);
+ #endif
+ 
++/* absent in 10.3.9.  */
++CG_EXTERN CGImageRef CGBitmapContextCreateImage (CGContextRef);
+ 
+ static inline BOOL IS_LION_OR_LATER(_THIS)
+ {
+@@ -62,7 +64,8 @@
+ @implementation NSScreen (NSScreenAccess)
+ - (void) setFrame:(NSRect)frame;
+ {
+-    _frame = frame;
++// !!! FIXME
++//    _frame = frame;
+ }
+ @end
+ static inline void QZ_SetFrame(_THIS, NSScreen *nsscreen, NSRect frame)
+@@ -553,6 +556,12 @@
+         cg_context = nil;
+     }
+     
++    if (cg_context) {
++        CGContextFlush (cg_context);
++        CGContextRelease (cg_context);
++        cg_context = nil;
++    }
++    
+     /* Release fullscreen resources */
+     if ( mode_flags & SDL_FULLSCREEN ) {
+ 
+diff -r fba40d9f4a73 src/video/quartz/SDL_QuartzWindow.h
+--- a/src/video/quartz/SDL_QuartzWindow.h	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/video/quartz/SDL_QuartzWindow.h	Sun Sep 16 19:11:49 2012 +0200
+@@ -25,6 +25,10 @@
+ typedef unsigned int NSUInteger;
+ #endif
+ 
++#if __MAC_OS_X_VERSION_MIN_REQUIRED < 1050
++typedef unsigned int NSUInteger;
++#endif
++
+ /* Subclass of NSWindow to fix genie effect and support resize events  */
+ @interface SDL_QuartzWindow : NSWindow
+ {
+diff -r fba40d9f4a73 src/video/x11/SDL_x11events.c
+--- a/src/video/x11/SDL_x11events.c	Fri Jan 20 19:49:48 2012 -0500
++++ b/src/video/x11/SDL_x11events.c	Sun Sep 16 19:11:49 2012 +0200
+@@ -48,6 +48,9 @@
+ #include "SDL_x11mouse_c.h"
+ #include "SDL_x11events_c.h"
+ 
++#ifdef XFREE86_KEYSYMS
++#include <X11/XF86keysym.h>
++#endif
+ 
+ /* Define this if you want to debug X11 events */
+ /*#define DEBUG_XEVENTS*/
+@@ -1115,6 +1118,90 @@
+ 	MISC_keymap[XK_Hyper_R&0xFF] = SDLK_MENU;   /* Windows "Menu" key */
+ }
+ 
++#ifdef XFREE86_KEYSYMS
++/* Macro for trivial assignment from XFree86 value to SDL value */
++#define XF86_to_SDLK(x) \
++    case XF86XK_##x:    \
++        return SDLK_##x
++
++static SDLKey
++TranslateXFree86VendorSpecificKeysyms(KeySym xsym)
++{
++    switch (xsym) {
++        /* Keys found on some "Internet" keyboards. */
++        XF86_to_SDLK(Standby);
++        XF86_to_SDLK(AudioLowerVolume);
++        XF86_to_SDLK(AudioMute);
++        XF86_to_SDLK(AudioRaiseVolume);
++        XF86_to_SDLK(AudioPlay);
++        XF86_to_SDLK(AudioStop);
++        XF86_to_SDLK(AudioPrev);
++        XF86_to_SDLK(AudioNext);
++        XF86_to_SDLK(HomePage);
++        XF86_to_SDLK(Mail);
++        XF86_to_SDLK(Start);
++        XF86_to_SDLK(Search);
++        XF86_to_SDLK(AudioRecord);
++
++        /* These are sometimes found on PDA's (e.g. Palm, PocketPC or elsewhere) */
++        XF86_to_SDLK(Calculator);
++        XF86_to_SDLK(Memo);
++        XF86_to_SDLK(ToDoList);
++        XF86_to_SDLK(Calendar);
++        XF86_to_SDLK(PowerDown);
++        XF86_to_SDLK(ContrastAdjust);
++        XF86_to_SDLK(RockerUp);
++        XF86_to_SDLK(RockerDown);
++        XF86_to_SDLK(RockerEnter);
++
++        /* Some more "Internet" keyboard symbols */
++        XF86_to_SDLK(Back);
++        XF86_to_SDLK(Forward);
++        XF86_to_SDLK(Stop);
++        XF86_to_SDLK(Refresh);
++        XF86_to_SDLK(PowerOff);
++        XF86_to_SDLK(WakeUp);
++        XF86_to_SDLK(Eject);
++        XF86_to_SDLK(ScreenSaver);
++        XF86_to_SDLK(WWW);
++        XF86_to_SDLK(Sleep);
++        XF86_to_SDLK(Favorites);
++        XF86_to_SDLK(AudioPause);
++        XF86_to_SDLK(AudioMedia);
++        XF86_to_SDLK(MyComputer);
++        XF86_to_SDLK(VendorHome);
++        XF86_to_SDLK(LightBulb);
++        XF86_to_SDLK(Shop);
++        XF86_to_SDLK(History);
++        XF86_to_SDLK(OpenURL);
++        XF86_to_SDLK(AddFavorite);
++        XF86_to_SDLK(HotLinks);
++        XF86_to_SDLK(BrightnessAdjust);
++
++        XF86_to_SDLK(Launch0);
++        XF86_to_SDLK(Launch1);
++        XF86_to_SDLK(Launch2);
++        XF86_to_SDLK(Launch3);
++        XF86_to_SDLK(Launch4);
++        XF86_to_SDLK(Launch5);
++        XF86_to_SDLK(Launch7);
++        XF86_to_SDLK(Launch8);
++        XF86_to_SDLK(Launch9);
++        XF86_to_SDLK(LaunchA);
++        XF86_to_SDLK(LaunchB);
++        XF86_to_SDLK(LaunchC);
++        XF86_to_SDLK(LaunchD);
++        XF86_to_SDLK(LaunchE);
++        XF86_to_SDLK(LaunchF);
++
++        default:
++            return SDLK_UNKNOWN;
++    }
++}
++#endif
++
++
++
+ /* Get the translated SDL virtual keysym */
+ SDLKey X11_TranslateKeycode(Display *display, KeyCode kc)
+ {
+@@ -1161,6 +1248,12 @@
+ 		    case 0xFF:
+ 			key = MISC_keymap[xsym&0xFF];
+ 			break;
++
++#ifdef XFREE86_KEYSYMS
++                    case 0x1008ff: /* XFree86 vendor specific keysyms from /usr/X11R6/include/X11/XF86keysym.h */
++                	key = TranslateXFree86VendorSpecificKeysyms(xsym);
++                	break;
++#endif
+ 		    default:
+ 			/*
+ 			fprintf(stderr, "X11: Unhandled xsym, sym = 0x%04x\n",
