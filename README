@@ -1,0 +1,19 @@
+This layer need
+yocto denzil
+meta-systemd branch denzil
+
+
+Add this lines to your conf.local
+
+LICENSE_FLAGS_WHITELIST = "commercial"
+
+
+SQUEEZEOS_DISTRO_VERSION ?= "7.8"
+SQUEEZEOS_DISTRO_RELEASE ?= "7.8.0"
+
+# SqueezeOS/SqueezePlay SCM
+SQUEEZEOS_SVN ?= "svn://svn.slimdevices.com/repos/jive/7.8/trunk/squeezeos/src;proto=http"
+SQUEEZEPLAY_SCM ?= "svn://svn.slimdevices.com/repos/jive/7.8/trunk/squeezeplay/src;proto=http"
+
+
+SQUEEZECENTER_SCM ?= "svn://svn.slimdevices.com/repos/slim/7.8;proto=http"
