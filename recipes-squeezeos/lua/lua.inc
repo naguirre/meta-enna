@@ -20,7 +20,7 @@ do_install() {
         install -m 0644 src/lua.h src/lualib.h src/lauxlib.h src/luaconf.h ${STAGING_INCDIR}/
         install -m 0755 src/lua src/luac ${STAGING_BINDIR}/
 
-	mkdir ${D}/usr
+	mkdir ${D}/usr/ ${D}/usr/bin/
         oe_runmake install INSTALL_TOP=${D}/usr
 }
 
