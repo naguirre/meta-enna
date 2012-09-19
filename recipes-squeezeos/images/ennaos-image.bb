@@ -20,6 +20,7 @@ IMAGE_INSTALL += " squeezeplay squeezeplay-squeezeos squeezeplay-desktop dropbea
 IMAGE_INSTALL += " watchdog "
 IMAGE_INSTALL += " shairport "
 IMAGE_INSTALL += " task-base-extended "
+IMAGE_INSTALL += " lighttpd "
 
 # wireless tools
 IMAGE_INSTALL += "wireless-tools"
