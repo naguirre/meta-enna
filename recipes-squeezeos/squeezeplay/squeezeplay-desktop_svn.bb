@@ -1,4 +1,4 @@
-DESCRIPTION = "SqueezePlay - Fab4 specific code"
+DESCRIPTION = "SqueezePlay - Desktop specific code"
 LICENSE = "CLOSED"
 
 SRCREV = "9704"
@@ -8,15 +8,15 @@ PR = "r2"
 
 DEPENDS += "squeezeplay"
 
-SRC_URI="${SQUEEZEPLAY_SCM};module=squeezeplay_fab4"
+SRC_URI="${SQUEEZEPLAY_SCM};module=squeezeplay_desktop"
 
-S = "${WORKDIR}/squeezeplay_fab4"
+S = "${WORKDIR}/squeezeplay_desktop"
 
 inherit autotools
 
 CFLAGS_prepend = '-I${STAGING_INCDIR}/squeezeplay'
 
-EXTRA_OEMAKE = "all lua-lint"
+EXTRA_OEMAKE = "all"
 
 # Optional close source package
 DEPENDS += "${@base_conditional('ENABLE_SPPRIVATE', 'yes', 'squeezeplay-private', '', d)}"
@@ -25,11 +25,7 @@ EXTRA_OECONF += "${@base_conditional('ENABLE_SPPRIVATE', 'yes', '--with-spprivat
 
 do_install() {
 	autotools_do_install
-
-	# move lua libraries to correct location
-	rm ${D}${libdir}/* 
 	mkdir -p ${D}${libdir}/lua/5.1
-	install -m 0755 .libs/fab4_bsp.so ${D}${libdir}/lua/5.1/fab4_bsp.so
 }
 
 

@@ -31,4 +31,4 @@ do_install() {
 PACKAGES = "liblua5.1-profiler-dbg liblua5.1-profiler"
 
 FILES_liblua5.1-profiler-dbg = "/usr/src/debug  /usr/lib/lua/5.1/.debug"
-FILES_liblua5.1-profiler = "${libdir}/lua/5.1/profiler.so ${bindir}"
+FILES_liblua5.1-profiler = "${libdir}/lua/5.1/profiler.so"

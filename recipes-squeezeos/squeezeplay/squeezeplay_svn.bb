@@ -37,26 +37,31 @@ EXTRA_OEMAKE = "all lua-lint"
 
 do_install_append() {
 	install -m 0644 ${WORKDIR}/logconf.lua ${D}${datadir}/jive/logconf.lua
+        mkdir -p  ${D}${includedir}/squeezeplay/ui
+        install -m 0644 ${S}/src/ui/*.h ${D}${includedir}/squeezeplay/ui
+        install -m 0644 ${S}/src/*.h ${D}${includedir}/squeezeplay
 
 }
 
-PACKAGES = "${PN}-dbg ${PN}-qvgaskin ${PN}-jiveskin ${PN}-fab4skin ${PN}-babyskin ${PN}"
+PACKAGES += "${PN}-qvgaskin ${PN}-jiveskin ${PN}-fab4skin ${PN}-babyskin"
 
-FILES_${PN}-qvgaskin += "\
-	${datadir}/jive/applets/QVGAbaseSkin \
+FILES_${PN}-qvgaskin = "\
+	${datadir}/jive/applets/QVGAbaseSkin/* \
 "
 
-FILES_${PN}-jiveskin += "\
-	${datadir}/jive/applets/QVGAportraitSkin \
+FILES_${PN}-jiveskin = "\
+	${datadir}/jive/applets/QVGAportraitSkin/* \
 "
 
-FILES_${PN}-babyskin += "\
-	${datadir}/jive/applets/QVGAlandscapeSkin \
+FILES_${PN}-babyskin = "\
+	${datadir}/jive/applets/QVGAlandscapeSkin/* \
 "
 
-FILES_${PN}-fab4skin += "\
-	${datadir}/jive/applets/WQVGAlargeSkin \
-	${datadir}/jive/applets/WQVGAsmallSkin \
+FILES_${PN}-fab4skin = "\
+	${datadir}/jive/applets/WQVGAlargeSkin/* \
+	${datadir}/jive/applets/WQVGAsmallSkin/* \
 "
 
-FILES_${PN} += "${datadir}"
+FILES_${PN} += "\
+	${datadir}\
+"
