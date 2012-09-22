@@ -25,6 +25,9 @@ IMAGE_INSTALL += " lighttpd "
 # wireless tools
 IMAGE_INSTALL += "wireless-tools"
 
+# mtd and ubi tools
+IMAGE_INSTALL += " mtd-utils "
+
 # useful command line tools
 IMAGE_INSTALL += "alsa-utils-aplay alsa-utils-amixer"
 
