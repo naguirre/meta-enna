@@ -27,5 +27,7 @@ do_install() {
 
 PACKAGES = "liblua5.1-filesystem-dbg liblua5.1-filesystem"
 
-FILES_liblua5.1-filesystem-dbg += "${libdir}/lua/5.1/.debug/ ${libdir}/lua/5.1/lfs.so"
-FILES_liblua5.1-filesystem += "${libdir}/lua/5.1/lfs.so*"
+INSANE_SKIP_liblua5.1-filesystem = "dev-so"
+
+FILES_liblua5.1-filesystem-dbg += "${libdir}/lua/5.1/.debug/"
+FILES_liblua5.1-filesystem += "${libdir}/lua/5.1/lfs.so ${libdir}/lua/5.1/lfs.so.*"
