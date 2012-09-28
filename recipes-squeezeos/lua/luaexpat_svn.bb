@@ -12,7 +12,6 @@ DEPENDS = "lua expat"
 
 SRC_URI="${SQUEEZEPLAY_SCM};module=luaexpat-${BV}"
 
-INSANE_SKIP_${PN} = "dev-so"
 
 S = "${WORKDIR}/luaexpat-${BV}"
 
@@ -20,9 +19,14 @@ EXTRA_OEMAKE = "PLATFORM=linux"
 
 do_install() {
 	oe_runmake install LUA_LIBDIR=${D}/${libdir}/lua/5.1 LUA_DIR=${D}/${datadir}/lua/5.1
+        rm -rf ${D}/${libdir}/lua/5.1/lxp.so
+        ln -s lxp.so.1.0.2 ${D}/${libdir}/lua/5.1/lxp.so
+
 }
 
 PACKAGES = "liblua5.1-expat-dbg liblua5.1-expat"
 
-FILES_liblua5.1-expat-dbg = "${libdir}/lua/5.1/.debug ${libdir}/lua/5.1/lxp.so"
-FILES_liblua5.1-expat = "${libdir}/lua/5.1/lxp.so.* ${datadir}"
+INSANE_SKIP_liblua5.1-expat = "dev-so"
+
+FILES_liblua5.1-expat-dbg += "${libdir}/lua/5.1/.debug ${libdir}/lua/5.1/lxp.so"
+FILES_liblua5.1-expat += "${libdir}/lua/5.1/lxp.so ${libdir}/lua/5.1/lxp.so.1.0.2 ${datadir}"
