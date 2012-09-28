@@ -15,13 +15,17 @@ RDEPENDS += "liblua5.1-socket liblua5.1-json liblua5.1-zipfilter liblua5.1-loop 
 RDEPENDS += "freefont"
 
 SRC_URI = "${SQUEEZEPLAY_SCM};module=squeezeplay \
-	file://logconf.lua"
+	file://logconf.lua \
+        file://jive.service"
 
 S = "${WORKDIR}/squeezeplay"
 
 ARM_INSTRUCTION_SET = "arm"
 
-inherit autotools
+inherit autotools systemd
+
+SYSTEMD_PACKAGES = "${PN}-systemd"
+SYSTEMD_SERVICE = "jive.service"
 
 EXTRA_OECONF = "--disable-portaudio --enable-fsync-workaround"
 
