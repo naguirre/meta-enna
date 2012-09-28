@@ -1,3 +1,0 @@
-# jive specific devices
-KERNEL=="irtx"			NAME="misc/irtx"
-KERNEL=="jive_mgmt"		NAME="misc/jive_mgmt"

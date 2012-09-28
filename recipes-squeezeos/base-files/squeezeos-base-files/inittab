@@ -1,3 +1,0 @@
-::sysinit:/etc/init.d/rcS
-::askfirst:/bin/sh
-tty3::respawn:/sbin/getty tty3 9600 VC vt100
