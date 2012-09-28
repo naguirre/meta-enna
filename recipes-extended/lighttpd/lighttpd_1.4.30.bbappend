@@ -4,10 +4,11 @@ PRINC := "${@int(PRINC) + 4}"
 
 inherit systemd
 
-SRC_URI += "file://lighttpd.service"
+SRC_URI += "file://lighttpd.service \
+            file://lighttpd.conf"
 
-SYSTEMD_PACKAGES = "${PN}"
-SYSTEMD_SERVICE_${PN} = "lighttpd.service"
+SYSTEMD_PACKAGES = "${PN}-systemd"
+SYSTEMD_SERVICE = "lighttpd.service"
 
 EXTRA_OECONF = " \
              --without-bzip2 \
