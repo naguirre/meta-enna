@@ -1,0 +1,14 @@
+[Unit]
+Description=SqueezePlay application
+After=graphical.target
+
+[Service]
+Environment=HOME=/home/root
+WorkingDirectory=/usr/bin
+ExecStart=/usr/bin/jive
+RemainAfterExit=yes
+Restart=always
+Type=simple
+
+[Install]
+WantedBy=graphical.target
