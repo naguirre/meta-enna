@@ -16,7 +16,8 @@ RDEPENDS += "freefont"
 
 SRC_URI = "${SQUEEZEPLAY_SCM};module=squeezeplay \
 	file://logconf.lua \
-        file://jive.service"
+        file://jive.service \
+        file://jive.sh"
 
 S = "${WORKDIR}/squeezeplay"
 
@@ -44,6 +45,7 @@ do_install_append() {
         mkdir -p  ${D}${includedir}/squeezeplay/ui
         install -m 0644 ${S}/src/ui/*.h ${D}${includedir}/squeezeplay/ui
         install -m 0644 ${S}/src/*.h ${D}${includedir}/squeezeplay
+        install -m 0755 ${WORKDIR}/jive.sh ${D}/${bindir}
 
 }
 
@@ -68,4 +70,5 @@ FILES_${PN}-fab4skin = "\
 
 FILES_${PN} += "\
 	${datadir}\
+        $[bindir}/jive.sh \
 "
