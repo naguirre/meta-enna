@@ -1,13 +1,13 @@
 DESCRIPTION = "Enna box web config"
 HOMEPAGE = "http://enna.me"
 
-PR = "r0"
+PR = "r1"
 LICENSE = "LGPLv2.1"
 LIC_FILES_CHKSUM = "file://README.md;md5=62cba4388876235130952fc84a5389ce"
 SRC_URI[md5sum] = "1face50ead0790d1297dfb04bacf273c"
 SRC_URI[sha256sum] = "b4533324b0a1f46ad74a9e92bf2caa46c246e9353059e1a835e735d41826ed19"
 
-SRCREV = "f157a90112771b827ee6ca67e5ff11e82dd9c271"
+SRCREV = "1328f34e2eb01ee30ab87bae6773fca332792e88"
 
 SRC_URI = "git://github.com/raoulh/www-enna.git;protocol=git"
 
