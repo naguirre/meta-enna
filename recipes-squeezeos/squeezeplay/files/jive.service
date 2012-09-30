@@ -5,7 +5,7 @@ After=graphical.target
 [Service]
 Environment=HOME=/home/root
 WorkingDirectory=/usr/bin
-ExecStart=/usr/bin/jive
+ExecStart=/usr/bin/jive.sh
 RemainAfterExit=yes
 Restart=always
 Type=simple
