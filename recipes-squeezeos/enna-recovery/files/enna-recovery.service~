@@ -1,0 +1,11 @@
+[Unit]
+Description=Enna OS recovery service
+After=graphical.target
+
+[Service]
+ExecStart=/sbin/enna-recovery.sh
+RemainAfterExit=yes
+Type=simple
+
+[Install]
+WantedBy=graphical.target

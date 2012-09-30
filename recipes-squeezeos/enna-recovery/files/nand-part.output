@@ -1,0 +1,11 @@
+check partition table copy 0: OK
+check partition table copy 1: OK
+check partition table copy 2: OK
+check partition table copy 3: OK
+partition  0: name =   bootloader, partition start =     2048, partition size =    32768
+partition  1: name =          env, partition start =    34816, partition size =      256
+partition  2: name =         home, partition start =    35072, partition size =   131072
+partition  3: name =      rootfs1, partition start =   166144, partition size =  1048576
+partition  4: name =      rootfs2, partition start =  1214720, partition size =  1048576
+partition  5: name =      updates, partition start =  2263296, partition size =        0
+6 partitions

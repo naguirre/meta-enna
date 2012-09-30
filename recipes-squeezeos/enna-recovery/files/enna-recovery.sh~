@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/usr/bin/nand-part > /tmp/nand.output

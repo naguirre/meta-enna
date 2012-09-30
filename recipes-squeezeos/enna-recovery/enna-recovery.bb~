@@ -1,0 +1,22 @@
+DESCRIPTION = "Enna box recovery scripts"
+HOMEPAGE = "http://enna.me"
+
+PR = "r0"
+LICENSE = "CLOSED"
+
+SRC_URI = "file://enna-recovery.sh \
+        file://enna-recovery.service \
+        file://nand-part.output \
+        file://nand.bin \
+        file://nanda.bin \
+        file://nandb.bin"
+
+SYSTEMD_PACKAGES = "${PN}-systemd"
+SYSTEMD_SERVICE = "${PN}.service"
+
+do_install() {
+    install -d ${D}/sbin/
+    install -m 0755 ${WORKDIR}/*.sh ${D}/sbin/
+}
+FILES_${PN} += "/sbin/"
+PACKAGE_ARCH = "all"
