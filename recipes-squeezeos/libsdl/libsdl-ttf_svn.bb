@@ -27,3 +27,7 @@ autotools_do_configure() {
 	${S}/autogen.sh
 	oe_runconf
 }
+
+do_install_append() {
+    rm ${D}/${libdir}/libSDL_ttf.la
+}
