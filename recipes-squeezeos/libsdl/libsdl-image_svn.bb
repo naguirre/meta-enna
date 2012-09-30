@@ -31,4 +31,5 @@ autotools_do_configure() {
 }
 
 do_install_append() {
+    rm ${D}/${libdir}/libSDL_image.la
 }
