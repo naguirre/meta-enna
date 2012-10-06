@@ -22,16 +22,26 @@ dd if=/usr/share/enna-recovery/nandb.bin of=/dev/nandb
 echo "Formatting Home partition (nandc)"
 /sbin/mkfs.ext4 /dev/nandc
 
+package=""
+
 for i in  `ls /*.pkg`
 do
     if [ "x$i" -eq "xupdate.pkg" ]; then
-        echo "Copy image on rootfs1 (nandd)"
-        dd if=$i of=/dev/nandd
-        echo "Copy image on rootfs2 (nande)"
-        dd if=$i of=/dev/nande
+        update=$i
         break
     fi
 done
+
+if [ $updated -eq 0 ]; then
+
+
+
+fi
+
+echo "Copy image on rootfs1 (nandd)"
+dd if=$package of=/dev/nandd
+echo "Copy image on rootfs2 (nande)"
+dd if=$package of=/dev/nande
 
 echo "Formatting updates partition (nandf)"
 /sbin/mkfs.ext4 /dev/nandf
