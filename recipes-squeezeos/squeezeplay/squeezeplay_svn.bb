@@ -36,7 +36,7 @@ EXTRA_OECONF_append_baby = " --enable-screen-rotation"
 DEPENDS += "${@base_conditional('ENABLE_SPPRIVATE', 'yes', 'squeezeplay-private', '', d)}"
 EXTRA_OECONF += "${@base_conditional('ENABLE_SPPRIVATE', 'yes', '--with-spprivate', '', d)}"
 
-CFLAGS_prepend = '-DSQUEEZEPLAY_RELEASE=\\"${DISTRO_RELEASE}\\" -DSQUEEZEPLAY_REVISION=\\"${SQUEEZEOS_SQUEEZEPLAY_REVISION}\\"'
+CFLAGS_prepend = '-DSQUEEZEPLAY_RELEASE=\\"${SQUEEZEOS_DISTRO_RELEASE}\\" -DSQUEEZEPLAY_REVISION=\\"${SQUEEZEOS_SQUEEZEPLAY_REVISION}\\"'
 
 EXTRA_OEMAKE = "all lua-lint"
 
