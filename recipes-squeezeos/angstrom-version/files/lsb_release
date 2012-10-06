@@ -1,0 +1,50 @@
+#!/bin/sh
+VERSION="$(awk NR==3 /etc/enna-version)"
+CODENAME="$(awk NR==2 /etc/enna-version)"
+DATE="$(awk NR==4 /etc/enna-version)"
+ID="ennaos"
+
+case $1 in
+"-v")
+	echo "No LSB modules are available."
+	;;
+"-i")
+	echo "Distributor ID: $ID"
+	;;
+"-irc")
+	echo "Distributor ID: $ID"
+	echo "Release:        $VERSION"
+	echo "Codename:       $CODENAME"
+	;;
+"-d")
+	echo "Description:    $ID-$CODENAME-$VERSION-$DATE"
+	;;
+"-r")
+	echo "Release:        $VERSION"
+	;;
+"-c")
+	echo "Codename:       $CODENAME"
+	;;
+"-a")
+	echo "Distributor ID: $ID"
+	echo "Description:    $ID-$CODENAME-$VERSION-$DATE"
+	echo "Release:        $VERSION"
+	echo "Codename:       $CODENAME"
+	;;
+"-s")
+	echo "No LSB modules are available."
+	;;
+*)
+	echo "Usage: lsb_release [options]"
+	echo ""
+	echo "Options:"
+	echo "  -h, --help         show this help message and exit"
+	echo "  -v, --version      show LSB modules this system supports"
+	echo "  -i, --id           show distributor ID"
+	echo "  -d, --description  show description of this distribution"
+	echo "  -r, --release      show release number of this distribution"
+	echo "  -c, --codename     show code name of this distribution"
+	echo "  -a, --all          show all of the above information"
+	echo "  -s, --short        show requested information in short format"
+;;
+esac
