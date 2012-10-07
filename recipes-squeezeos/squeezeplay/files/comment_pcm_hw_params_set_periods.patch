@@ -1,0 +1,21 @@
+--- /home/nico/e17_src/squeezeplay/src/audio/decode/decode_alsa_backend.c	2012-08-31 08:28:26.751742824 +0200
++++ src/audio/decode/decode_alsa_backend.c	2012-10-06 00:47:14.807617235 +0200
+@@ -625,12 +625,12 @@
+ 	}
+ 
+ 	/* set buffer and period times */
+-	val = state->period_count;
+-	if ((err = snd_pcm_hw_params_set_periods_near(*pcmp, hw_params, &val, 0)) < 0) {
+-		LOG_ERROR("Unable to set period size %s", snd_strerror(err));
+-		return err;
+-	}
+-	state->period_count = val;
++	/* val = state->period_count; */
++	/* if ((err = snd_pcm_hw_params_set_periods_near(*pcmp, hw_params, &val, 0)) < 0) { */
++	/* 	LOG_ERROR("Unable to set period size %s", snd_strerror(err)); */
++	/* 	return err; */
++	/* } */
++	/* state->period_count = val; */
+ 
+ 	val = state->buffer_time;
+ 	dir = 1;

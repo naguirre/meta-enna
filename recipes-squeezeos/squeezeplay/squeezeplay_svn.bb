@@ -15,6 +15,8 @@ RDEPENDS += "liblua5.1-socket liblua5.1-json liblua5.1-zipfilter liblua5.1-loop 
 RDEPENDS += "freefont"
 
 SRC_URI = "${SQUEEZEPLAY_SCM};module=squeezeplay \
+        file://jive_no_display.patch \
+        file://comment_pcm_hw_params_set_periods.patch \
 	file://logconf.lua \
         file://jive.service \
         file://jive.sh"
