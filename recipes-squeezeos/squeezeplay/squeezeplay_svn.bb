@@ -5,7 +5,7 @@ SRCREV = "9704"
 LIC_FILES_CHKSUM="file://LICENSE;md5=0c32b78019be064aeb5ec5c5f1eb0586"
 
 PV = "${DISTRO_VERSION}+svnr${SRCREV}"
-PR = "r24"
+PR = "r25"
 
 DEPENDS += "libsdl libsdl-ttf libsdl-gfx libsdl-image"
 DEPENDS += "lua lua-native luatolua++"
