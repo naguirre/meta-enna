@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://README.md;md5=62cba4388876235130952fc84a5389ce"
 SRC_URI[md5sum] = "1face50ead0790d1297dfb04bacf273c"
 SRC_URI[sha256sum] = "89bcbf54f75f030a402a170ccc5286284999dc29"
 
-SRCREV = "1328f34e2eb01ee30ab87bae6773fca332792e88"
+SRCREV = "${AUTOREV}"
 
 SRC_URI = "git://github.com/raoulh/www-enna.git;protocol=git"
 
