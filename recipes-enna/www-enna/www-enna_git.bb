@@ -22,6 +22,7 @@ do_install() {
     install -m 0644 ${S}/css/*.css ${D}/www/pages/css
     install -m 0644 ${S}/img/* ${D}/www/pages/img
     install -m 0644 ${S}/js/*.js ${D}/www/pages/js
+    sed -i 's/raoul/root/' ${D}/www/pages/common.php
 }
 FILES_${PN} += "/www/pages"
 PACKAGE_ARCH = "all"
