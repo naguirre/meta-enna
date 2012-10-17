@@ -17,6 +17,7 @@ IMAGE_INSTALL += " \
 	${CONMANPKGS} \
 	${ROOTFS_PKGMANAGE_PKGS} \
 	timestamp-service \
+    squashfs-tools \
 "
 
 IMAGE_DEV_MANAGER   = "udev"
