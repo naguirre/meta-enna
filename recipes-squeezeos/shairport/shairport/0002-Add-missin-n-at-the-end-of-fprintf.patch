@@ -1,0 +1,25 @@
+From 789bc260c58f593371972be9944a716bbc04a979 Mon Sep 17 00:00:00 2001
+From: Nicolas Aguirre <aguirre.nicolas@gmail.com>
+Date: Thu, 18 Oct 2012 08:22:05 +0200
+Subject: [PATCH 2/2] Add missin '\n' at the end of fprintf.
+
+---
+ audio_alsa.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/audio_alsa.c b/audio_alsa.c
+index f0a73b4..adf0e48 100644
+--- a/audio_alsa.c
++++ b/audio_alsa.c
+@@ -21,7 +21,7 @@ void audio_set_device_name(char* device_name)
+ }
+ 
+ void audio_set_device_id(char* device_id) {
+-    fprintf(stderr, "audio_set_device_id: not supported with alsa");
++    fprintf(stderr, "audio_set_device_id: not supported with alsa\n");
+ }
+ 
+ char* audio_get_driver(void)
+-- 
+1.7.9.5
+
