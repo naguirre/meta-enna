@@ -8,6 +8,9 @@ LICENSE = "GPLv3"
 
 PR = "r0"
 
+SRC_URI[md5sum] = "fb3670dee9f71af1e55ac5dcd64e213e"
+SRC_URI[sha256sum] = "4de2cc6f84aad3068cbbca893506b40029d92e83947b66455d5456460934b8c6"
+
 SRC_URI = "http://savannah.nongnu.org/download/dhcp-fwd/dhcp-forwarder-${PV}.tar.bz2 \
 	file://bridge.patch;patch=0;pnum=0 \
 	file://bridge \
