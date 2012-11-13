@@ -1,11 +1,12 @@
 DESCRIPTION = "Linux kernel for jive devices"
 SECTION = "kernel"
-LICENSE = "GPL"
-
+LICENSE = "GPLv2"
+LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 LINUX_ARCH = "imx35"
 LINUX_VERSION = "2.6.26"
 PV = "${LINUX_VERSION}+${DISTRO_VERSION}+svnr${SRCREV}"
 PR = "r9"
+SRCREV = "9704"
 
 inherit kernel
 
