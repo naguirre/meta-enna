@@ -1,10 +1,10 @@
 DESCRIPTION = "Jive test software"
 
-LICENSE="closed"
+LICENSE = "CLOSED"
 
 PV = "${DISTRO_VERSION}+svnr${SRCREV}"
 PR = "r3"
-
+SRCREV = "9704"
 SRC_URI="${SQUEEZEOS_SVN};module=jivetest"
 
 S = "${WORKDIR}/jivetest"
