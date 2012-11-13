@@ -1,0 +1,43 @@
+#!/bin/sh
+#
+# System init
+
+
+
+# Mount /proc and /sys filesystems
+
+mount -t proc proc /proc
+
+/bin/grep -q factoryreset /proc/cmdline
+FACTORY_RESET=$?
+
+if [ $FACTORY_RESET -eq 0 ]
+then
+  /bin/echo "Formatting ext4 filesystem to reset to factory reset"
+  /sbin/mkfs.ext4 /dev/nandc
+fi
+
+# Mount Nand storage
+/bin/mount -t ext4 -o noatime /dev/nandc /media/storage
+
+/bin/echo "Filesystem overlay: unionfs"
+
+# Mount media overlay
+/bin/mount -t aufs -o dirs=/media/storage=rw:/=ro none /media/overlay
+/bin/mount -o move /dev /media/overlay/dev
+
+/bin/umount /sys
+/bin/mount -t sysfs none /media/overlay/sys/
+
+/bin/umount /proc
+/bin/mount -t proc none /media/overlay/proc/
+
+
+# Run systemd process
+exec /usr/sbin/chroot /media/overlay /lib/systemd/systemd
+
+/bin/echo "Failed to run init"
+exec /bin/sh
+
+exit 1
+
