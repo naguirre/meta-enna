@@ -12,8 +12,8 @@ SQUEEZEOS_DISTRO_VERSION ?= "7.8"
 SQUEEZEOS_DISTRO_RELEASE ?= "7.8.0"
 
 # SqueezeOS/SqueezePlay SCM
-SQUEEZEOS_SVN ?= "svn://svn.slimdevices.com/repos/jive/7.8/trunk/squeezeos/src;proto=http"
-SQUEEZEPLAY_SCM ?= "svn://svn.slimdevices.com/repos/jive/7.8/trunk/squeezeplay/src;proto=http"
+SQUEEZEOS_SVN ?= "svn://svn.slimdevices.com/repos/jive/7.8/trunk/squeezeos/src;protocol=http"
+SQUEEZEPLAY_SCM ?= "svn://svn.slimdevices.com/repos/jive/7.8/trunk/squeezeplay/src;protocol=http"
 
 
-SQUEEZECENTER_SCM ?= "svn://svn.slimdevices.com/repos/slim/7.8;proto=http"
+SQUEEZECENTER_SCM ?= "svn://svn.slimdevices.com/repos/slim/7.8;protocol=http"
