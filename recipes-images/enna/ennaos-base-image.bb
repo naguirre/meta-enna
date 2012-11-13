@@ -15,7 +15,7 @@ IMAGE_INSTALL += " mtd-utils dosfstools e2fsprogs-mke2fs"
 IMAGE_INSTALL += "alsa-utils-aplay alsa-utils-amixer"
 
 # Simple NTP client
-IMAGE_INSTALL += "ntp cronie ntp-systemd cronie-systemd"
+IMAGE_INSTALL += "cronie cronie-systemd"
 
 IMAGE_INSTALL += " kernel-modules "
 
