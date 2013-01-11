@@ -4,8 +4,19 @@
 diff /usr/share/enna-recovery/nand-part.output /tmp/nand-part.output
 
 if [ $? -eq 1 ]; then
-    # nand part is not correct, create the right partition table and reboot the machine.
-    dd if=/dev/nand of=/usr/share/enna-recovery/nand.bin count=1 bs=2048
+    # nand part is not correct
+    # Save nandh if it exists, it contains the macadress
+    if [ -f /dev/nandh ]; then
+	dd if=/dev/nandh of=/tmp/nandh.bin bs=512 count=4096
+	eval `grep "mac=" /tmp/nandh.bin`
+	echo $mac
+	mkdir -p /tmp/nanda
+	mount /dev/nanda /tmp/nanda
+	echo $mac > /tmp/nanda/mac_address
+    fi
+
+    # create the right partition table and reboot the machine.
+    dd  if=/usr/share/enna-recovery/nand.bin of=/dev/nand count=1 bs=2048
     /usr/bin/nand-part > /tmp/nand-part.output
     diff /usr/share/enna-recovery/nand-part.output /tmp/nand-part.output
     if [ $? -eq 1 ]; then
@@ -14,10 +25,21 @@ if [ $? -eq 1 ]; then
     /sbin/reboot
 fi
 
+mkdir -p /tmp/nanda
+mount /dev/nanda /tmp/nanda
+mac=`cat /tmp/nanda/mac_address`
+cp /usr/share/enna-recovery/nandb.bin /tmp/nandb.bin
+sed -i -e "s/00:00:00:00:00:00/$mac/g" /tmp/nandb.bin
+umount /dev/nanda
+
 echo "Recovery of (nanda)"
 dd if=/usr/share/enna-recovery/nanda.bin of=/dev/nanda
+
+
 echo "Recovery of (nandb)"
-dd if=/usr/share/enna-recovery/nandb.bin of=/dev/nandb
+dd if=/tmp/nandb.bin of=/dev/nandb
+
+
 
 echo "Formatting Home partition (nandc)"
 /sbin/mkfs.ext4 /dev/nandc
