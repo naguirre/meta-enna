@@ -1,32 +1,12 @@
-#Angstrom image to test systemd
+DESCRIPTION = "Calaos server - image"
 
-LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=3f40d7994397109285ec7b81fdeb3b58"
+require ennaos-base-image.bb
 
-IMAGE_PREPROCESS_COMMAND = "rootfs_update_timestamp"
-
-DISTRO_UPDATE_ALTERNATIVES ??= ""
-ROOTFS_PKGMANAGE_PKGS ?= '${@base_conditional("ONLINE_PACKAGE_MANAGEMENT", "none", "", "${ROOTFS_PKGMANAGE} ${DISTRO_UPDATE_ALTERNATIVES}", d)}'
-
-CONMANPKGS ?= "connman connman-plugin-loopback connman-plugin-ethernet connman-plugin-wifi connman-systemd"
-CONMANPKGS_libc-uclibc = ""
-
-IMAGE_INSTALL += " \
-	angstrom-task-boot \
-	task-basic \
-	${CONMANPKGS} \
-	${ROOTFS_PKGMANAGE_PKGS} \
-	timestamp-service \
-        lighttpd \
-        calaos-server \
-        squeezeplay-jive \
-"
-
-IMAGE_DEV_MANAGER   = "udev"
-IMAGE_INIT_MANAGER  = "systemd"
-IMAGE_INITSCRIPTS   = " "
-IMAGE_LOGIN_MANAGER = "tinylogin shadow"
+IMAGE_INSTALL += " watchdog "
+IMAGE_INSTALL += " lighttpd lighttpd-module-fastcgi "
+IMAGE_INSTALL += " avahi avahi-daemon avahi-systemd avahi-utils "
+IMAGE_INSTALL += " php-cli "
+IMAGE_INSTALL += " www-enna "
+IMAGE_INSTALL += " alsa-utils-aplay alsa-utils-amixer "
 
 export IMAGE_BASENAME = "enna-server-image"
-
-inherit image
