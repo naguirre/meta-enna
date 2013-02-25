@@ -1,0 +1,11 @@
+--- libvmime/src/Makefile.am.orig	2010-11-16 13:55:53.000000000 +0100
++++ libvmime/src/Makefile.am	2013-02-25 13:22:53.080430921 +0100
+@@ -4,7 +4,7 @@
+ 
+ AUTOMAKE_OPTIONS = no-dependencies foreign
+ INTERNALS =
+-INCLUDES = -I$(prefix)/include -I$(top_srcdir) @PKGCONFIG_CFLAGS@ @EXTRA_CFLAGS@
++INCLUDES = -I$(top_srcdir) @PKGCONFIG_CFLAGS@ @EXTRA_CFLAGS@
+ lib_LTLIBRARIES = libvmime.la
+ libvmime_la_LDFLAGS = -export-dynamic -version-info @LIBRARY_VERSION@ @PKGCONFIG_LIBS@ @EXTRA_LIBS@
+ libvmime_la_SOURCES = address.cpp \
