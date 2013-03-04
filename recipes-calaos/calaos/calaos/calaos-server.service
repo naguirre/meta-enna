@@ -1,0 +1,11 @@
+[Unit]
+Description=Calaos home automation server service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/calaos_server
+RemainAfterExit=yes
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
