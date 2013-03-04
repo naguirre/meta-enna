@@ -13,10 +13,12 @@ IMAGE_INSTALL += " mtd-utils dosfstools e2fsprogs-mke2fs"
 
 # useful command line tools
 IMAGE_INSTALL += "alsa-utils-aplay alsa-utils-amixer"
+IMAGE_INSTALL += "pciutils usbutils"
 
 # Simple NTP client
 IMAGE_INSTALL += "cronie cronie-systemd"
 
+# Install ALL modules for kernel
 IMAGE_INSTALL += " kernel-modules "
 
 IMAGE_INSTALL += " liblzma "
