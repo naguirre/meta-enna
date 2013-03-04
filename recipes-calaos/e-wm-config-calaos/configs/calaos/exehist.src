@@ -1,0 +1,10 @@
+group "E_Exehist" struct {
+    group "history" list {
+        group "E_Exehist_Item" struct {
+            value "exe" string: "engrampa %U";
+            value "normalized_exe" string: "engrampa";
+            value "launch_method" string: "menu/apps";
+            value "exetime" double: 1362253813.3363199234008789062500000;
+        }
+    }
+}

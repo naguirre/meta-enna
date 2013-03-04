@@ -1,0 +1,14 @@
+group "History" struct {
+    group "subjects" hash {
+        key "APPLICATION";
+        group "History_Types" struct {
+        }
+    }
+    group "subjects" hash {
+        key "";
+        group "History_Types" struct {
+        }
+    }
+    value "version" int: 2;
+    value "begin" double: 1361649008.5229649543762207031250000;
+}
