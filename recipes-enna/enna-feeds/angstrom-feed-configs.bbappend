@@ -7,7 +7,7 @@ do_compile() {
 	mkdir -p ${S}/${sysconfdir}/opkg
 
         echo "src/gz base ${ANGSTROM_URI}/${FEED_BASEPATH}${FEED_ARCH}/" > ${S}/${sysconfdir}/opkg/base-feed.conf
-	echo "src/gz ${MACHINE_ARCH} ${ANGSTROM_URI}/${FEED_BASEPATH}${FEED_ARCH}/machine/${MACHINE_ARCH}" >  ${S}/${sysconfdir}/opkg/${MACHINE_ARCH}-feed.conf
+	echo "src/gz ${MACHINE_ARCH} ${ANGSTROM_URI}/${FEED_BASEPATH}/${MACHINE_ARCH}" >  ${S}/${sysconfdir}/opkg/${MACHINE_ARCH}-feed.conf
 	echo "#src/gz sdk ${ANGSTROM_URI}/${FEED_BASEPATH}sdk" > ${S}/${sysconfdir}/opkg/sdk-feed.conf
 	echo "src/gz no-arch ${ANGSTROM_URI}/${FEED_BASEPATH}all" > ${S}/${sysconfdir}/opkg/noarch-feed.conf
 		
@@ -18,7 +18,7 @@ do_compile() {
 }
 
 
-PRINC := "${@int(PRINC) + 2}"
+PRINC := "${@int(PRINC) + 3}"
 
 FILES_${PN} = "${sysconfdir}/opkg/base-feed.conf \
                ${sysconfdir}/opkg/${MACHINE_ARCH}-feed.conf \
