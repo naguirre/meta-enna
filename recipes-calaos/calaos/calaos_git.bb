@@ -2,7 +2,7 @@ DESCRIPTION = "Calaos"
 SECTION = "x11/multimedia"
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
-PR = "r6"
+PR = "r8"
 SRC_URI[md5sum] = "1face50ead0790d1297dfb04bacf273c"
 SRC_URI[sha256sum] = "89bcbf54f75f030a402a170ccc5286284999dc29"
 
