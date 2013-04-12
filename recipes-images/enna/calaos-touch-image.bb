@@ -13,5 +13,8 @@ IMAGE_INSTALL += " avahi avahi-daemon avahi-systemd avahi-utils "
 IMAGE_INSTALL += " php-cli php-fpm"
 IMAGE_INSTALL += " alsa-utils-aplay alsa-utils-amixer "
 IMAGE_INSTALL += " calaos-server calaos-home calaos-web"
+IMAGE_INSTALL += " ntp "
+IMAGE_INSTALL += " shairport squeezeplay squeezeplay-desktop squeezeplay-systemd "
+IMAGE_INSTALL += " nfs-utils samba " 
 
 export IMAGE_BASENAME = "calaos-touch-image"
