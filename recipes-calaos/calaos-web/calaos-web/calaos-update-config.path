@@ -1,0 +1,7 @@
+[Unit]
+Description=Update Calaos configuration when a file is found in /run/calaos/config
+
+[Path]
+DirectoryNotEmpty=/run/calaos/config
+MakeDirectory=yes
+DirectoryMode=0777
