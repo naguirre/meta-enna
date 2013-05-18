@@ -11,9 +11,6 @@ DEPENDS += "libsdl libsdl-ttf libsdl-gfx libsdl-image"
 DEPENDS += "lua lua-native luatolua++"
 DEPENDS += "flac libmad tremor"
 
-RDEPENDS += "liblua5.1-socket liblua5.1-json liblua5.1-zipfilter liblua5.1-loop liblua5.1-filesystem liblua5.1-profiler liblua5.1-tolua++ liblua5.1-md5 liblua5.1-expat"
-RDEPENDS += "freefont"
-
 SRC_URI = "${SQUEEZEPLAY_SCM};module=squeezeplay \
         file://jive_no_display.patch \
         file://comment_pcm_hw_params_set_periods.patch \
@@ -27,7 +24,9 @@ ARM_INSTRUCTION_SET = "arm"
 
 inherit autotools systemd
 
-SYSTEMD_PACKAGES = "${PN}-systemd"
+RPROVIDES_${PN} += "${PN}-systemd"
+RREPLACES_${PN} += "${PN}-systemd"
+RCONFLICTS_${PN} += "${PN}-systemd"
 SYSTEMD_SERVICE = "jive.service"
 
 EXTRA_OECONF = "--disable-portaudio --enable-fsync-workaround"
@@ -48,7 +47,8 @@ do_install_append() {
         install -m 0644 ${S}/src/ui/*.h ${D}${includedir}/squeezeplay/ui
         install -m 0644 ${S}/src/*.h ${D}${includedir}/squeezeplay
         install -m 0755 ${WORKDIR}/jive.sh ${D}/${bindir}
-
+	install -d ${D}${systemd_unitdir}/system
+	install -m 0644 ${WORKDIR}/jive.service ${D}${systemd_unitdir}/system
 }
 
 PACKAGES += "${PN}-qvgaskin ${PN}-jiveskin ${PN}-fab4skin ${PN}-babyskin"
@@ -71,6 +71,6 @@ FILES_${PN}-fab4skin = "\
 "
 
 FILES_${PN} += "\
-	${datadir}\
+	${datadir} \
         $[bindir}/jive.sh \
 "

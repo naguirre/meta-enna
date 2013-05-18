@@ -5,17 +5,7 @@ LICENSE = "GPLv2"
 PV = "${DISTRO_VERSION}"
 PR = "r53"
 LIC_FILES_CHKSUM = "file://License.txt;md5=1c5138338dfe20ec44c8ac5a37d8dd00"
-RDEPENDS += "perl perl-modules libcompress-raw-zlib-perl libclass-xsaccessor-perl"
-RDEPENDS += "libdbi-perl sqlite3 libdbd-sqlite-perl"
-RDEPENDS += "libdigest-sha1-perl libjson-xs-perl libhtml-parser-perl"
-RDEPENDS += "libtemplate-toolkit-perl libxml-parser-perl libyaml-libyaml-perl"
-RDEPENDS += "libev-perl libio-aio-perl libimage-scale-perl"
-RDEPENDS += "liblinux-inotify2-perl libaudio-scan-perl libsub-name-perl"
 
-# For performance measures
-#RDEPENDS += "libdevel-nytprof-perl"
-
-# BROKEN: libencode-detect-perl
 
 SQUEEZECENTER_SVN_MODULE ?= "trunk"
 

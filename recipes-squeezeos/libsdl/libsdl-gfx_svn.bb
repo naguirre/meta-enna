@@ -19,7 +19,6 @@ SRC_URI="${SQUEEZEPLAY_SCM};module=SDL_gfx-${BV}"
 S = "${WORKDIR}/SDL_gfx-${BV}"
 
 DEPENDS = "libsdl freetype"
-RDEPENDS = "libsdl"
 
 inherit autotools
 

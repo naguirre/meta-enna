@@ -3,6 +3,8 @@ SECTION = "libs"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=efa3b19feaced71ab67e3649bd67f45e"
 
+BBCLASSEXTEND = "native nativesdk"
+
 BV = "5.1.1"
 
 PV = "${BV}+svnr${SRCREV}"
@@ -24,7 +26,7 @@ do_install() {
         oe_runmake install INSTALL_TOP=${D}/usr
 }
 
-PACKAGES = "liblua5.1-dbg liblua5.1-dev liblua5.1 ${PN}-dbg ${PN}-doc ${PN}"
+PACKAGES =+ "liblua5.1-dbg liblua5.1-dev liblua5.1 ${PN}-dbg ${PN}-doc ${PN}"
 
 FILES_${PN} = "${bindir}"
 FILES_${PN}-doc = "${mandir}"
