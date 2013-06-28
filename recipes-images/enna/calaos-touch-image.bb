@@ -2,9 +2,8 @@ DESCRIPTION = "Calaos Touch - image"
 
 require ennaos-base-image.bb
 
-IMAGE_FEATURES += "splash ssh-server-dropbear"
+IMAGE_FEATURES += "splash"
 
-IMAGE_INSTALL += " ${XSERVER} "
 IMAGE_INSTALL += " ttf-dejavu-sans ttf-dejavu-sans-mono ttf-dejavu-common "
 IMAGE_INSTALL += " xserver-common xserver-nodm-init-systemd "
 IMAGE_INSTALL += " watchdog "
