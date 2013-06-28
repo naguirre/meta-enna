@@ -1,17 +1,17 @@
-DESCRIPTION = "Calaos Graphical User Insterface"
+ESCRIPTION = "Calaos Graphical User Insterface"
 HOMEPAGE = "http://www.calaos.fr"
 
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
-PR = "r9"
+PR = "r10"
 
-DEPENDS = "libsigc++-2.0 owfs log4cpp libvmime jansson lua5.1"
+DEPENDS = "libsigc++-2.0 owfs log4cpp libvmime jansson lua5.1 elementary"
 
 SRC_URI[md5sum] = "1face50ead0790d1297dfb04bacf273c"
 SRC_URI[sha256sum] = "89bcbf54f75f030a402a170ccc5286284999dc29"
 
-SRCREV = "${AUTOREV}"
+SRCREV = "90c452a1808504ea05c048302040a4834dae0258"
 SECTION = "x11/multimedia"
 
 S = "${WORKDIR}/git"
