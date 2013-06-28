@@ -8,7 +8,7 @@ PV = "${DISTRO_VERSION}+svnr${SRCREV}"
 PR = "r25"
 
 DEPENDS += "libsdl libsdl-ttf libsdl-gfx libsdl-image"
-DEPENDS += "lua lua-native luatolua++"
+DEPENDS += "lua5.1 lua5.1-native luatolua++"
 DEPENDS += "flac libmad tremor"
 
 SRC_URI = "${SQUEEZEPLAY_SCM};module=squeezeplay \

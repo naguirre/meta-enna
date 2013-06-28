@@ -1,5 +1,5 @@
 DEPENDS += "libsdl libsdl-ttf libsdl-gfx libsdl-image"
-DEPENDS += "lua lua-native luatolua++"
+DEPENDS += "lua5.1 lua5.1-native liblua5.1-tolua++"
 DEPENDS += "flac libmad tremor"
 
 S = "${WORKDIR}/squeezeplay"
@@ -8,8 +8,7 @@ ARM_INSTRUCTION_SET = "arm"
 
 inherit autotools systemd
 
-SYSTEMD_PACKAGES = "${PN}-systemd"
-SYSTEMD_SERVICE = "jive.service"
+SYSTEMD_SERVICE_${PN} = "jive.service"
 
 EXTRA_OECONF = "--disable-portaudio --enable-fsync-workaround"
 
@@ -29,7 +28,8 @@ do_install_append() {
         install -m 0644 ${S}/src/ui/*.h ${D}${includedir}/squeezeplay/ui
         install -m 0644 ${S}/src/*.h ${D}${includedir}/squeezeplay
         install -m 0755 ${WORKDIR}/jive.sh ${D}/${bindir}
-
+	install -d ${D}${systemd_unitdir}/system	
+	install -m 0644 ${WORKDIR}/jive.service ${D}${systemd_unitdir}/system
 }
 
 PACKAGES += "${PN}-qvgaskin ${PN}-jiveskin ${PN}-fab4skin ${PN}-babyskin"
