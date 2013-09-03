@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
 PR = "r10"
 
-DEPENDS = "libsigc++-2.0 owfs log4cpp libvmime jansson lua5.1"
+DEPENDS = "elementary libsigc++-2.0 owfs log4cpp libvmime jansson lua5.1"
 
 SRCREV = "90c452a1808504ea05c048302040a4834dae0258"
 SECTION = "x11/multimedia"

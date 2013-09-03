@@ -11,6 +11,7 @@ IMAGE_INSTALL += "lighttpd lighttpd-module-fastcgi"
 IMAGE_INSTALL += "php-cli php-fpm"
 IMAGE_INSTALL += "calaos-server calaos-home calaos-web"
 IMAGE_INSTALL += "ntp"
-IMAGE_INSTALL += "avahi-utils shairport squeezeplay-nogui"
+IMAGE_INSTALL += "avahi-utils shairport"
+#IMAGE_INSTALL += "squeezeplay-nogui"
 IMAGE_INSTALL += "nano htop procps"
 
