@@ -4,11 +4,11 @@ HOMEPAGE = "http://www.calaos.fr"
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
-PR = "r10"
+PR = "r11"
 
 DEPENDS = "libsigc++-2.0 owfs log4cpp libvmime jansson lua5.1 elementary"
 
-SRCREV = "a5e53f528d311ec073dddbffdf012ada231dd538"
+SRCREV = "6609524b7f9a070052f4858e2a686e5bfb5447ba"
 SECTION = "x11/multimedia"
 
 S = "${WORKDIR}/git"
