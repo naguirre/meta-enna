@@ -8,7 +8,7 @@ PR = "r10"
 
 DEPENDS = "elementary libsigc++-2.0 owfs log4cpp libvmime jansson lua5.1"
 
-SRCREV = "53a03eea176cb600a4d421c3afc17938bf8be215"
+SRCREV = "a5e53f528d311ec073dddbffdf012ada231dd538"
 SECTION = "x11/multimedia"
 
 S = "${WORKDIR}/git"

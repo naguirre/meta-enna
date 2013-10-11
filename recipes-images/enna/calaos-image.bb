@@ -15,3 +15,5 @@ IMAGE_INSTALL += "avahi-utils shairport"
 #IMAGE_INSTALL += "squeezeplay-nogui"
 IMAGE_INSTALL += "nano htop procps"
 
+#IMAGE_INSTALL += "edje-utils elementary-tests"
+
